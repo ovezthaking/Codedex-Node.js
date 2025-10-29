@@ -35,7 +35,24 @@ const server = http.createServer((request, response) => {
             }
         }
         else if(request.method === "PUT"){
-            
+            if(!mood){
+                response.writeHead(200, {'Content-type' : "text/plain; charset=utf8"});
+                response.end(`There is not a mood to update. Post new!`); 
+            }
+            else{
+                let newMood = '';
+                request.on('data', (chunk) => {
+                    newMood += chunk;
+                });
+                
+                request.on('end', () => {
+                    console.log(`Your last mood: ${mood}`);
+                    mood = newMood;
+                    console.log(`Your current mood: ${mood}`);
+                });
+                response.writeHead(200, {'Content-type' : "text/plain; charset=utf8"});
+                response.end(mood); 
+            }
         }
         else if(request.method === "PATCH"){
             
