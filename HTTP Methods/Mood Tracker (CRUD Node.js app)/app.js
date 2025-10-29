@@ -3,67 +3,87 @@ const http = require('http');
 let mood = '';
 
 const server = http.createServer((request, response) => {
-        if(request.method === "GET"){
-            if(!mood){
-                console.log("You haven\'t posted any mood yet");
-                response.writeHead(200, {'Content-type' : "text/plain; charset=utf8"});
-                response.end("No mood...");
-            }
-            else{
-                console.log(mood);
-                response.writeHead(200, {'Content-type' : "text/plain; charset=utf8"});
-                response.end(mood);
-            }
-        }
-        else if(request.method === "POST"){
-            if(!mood){
-                let newMood = '';
-                request.on('data', (chunk) => {
-                    newMood += chunk;
-                });
-                
-                request.on('end', () => {
-                    mood = newMood;
-                    console.log(`Your current mood: ${mood}`);
-                });
-                response.writeHead(200, {'Content-type' : "text/plain; charset=utf8"});
-                response.end(mood); 
-            }
-            else{
-                response.writeHead(200, {'Content-type' : "text/plain; charset=utf8"});
-                response.end(`Here exist your past mood: ${mood}`); 
-            }
-        }
-        else if(request.method === "PUT"){
-            if(!mood){
-                response.writeHead(200, {'Content-type' : "text/plain; charset=utf8"});
-                response.end(`There is not a mood to update. Post new!`); 
-            }
-            else{
-                let newMood = '';
-                request.on('data', (chunk) => {
-                    newMood += chunk;
-                });
-                
-                request.on('end', () => {
-                    console.log(`Your last mood: ${mood}`);
-                    mood = newMood;
-                    console.log(`Your current mood: ${mood}`);
-                });
-                response.writeHead(200, {'Content-type' : "text/plain; charset=utf8"});
-                response.end(mood); 
-            }
-        }
-        else if(request.method === "PATCH"){
-            
-        }
-        else if(request.method === "DELETE"){
-            
+    if(request.method === "GET"){
+        if(!mood){
+            console.log("You haven\'t posted any mood yet");
+            response.writeHead(200, {'Content-type' : "text/plain; charset=utf8"});
+            response.end("No mood...");
         }
         else{
-            response.writeHead(404, {'Content-type' : "text/plain; charset=utf8"});
-            response.end("404 Not Found");
+            console.log(mood);
+            response.writeHead(200, {'Content-type' : "text/plain; charset=utf8"});
+            response.end(mood);
         }
+    }
+    else if(request.method === "POST"){
+        if(!mood){
+            let newMood = '';
+            request.on('data', (chunk) => {
+                newMood += chunk;
+            });
+            
+            request.on('end', () => {
+                mood = newMood;
+                console.log(`Your current mood: ${mood}`);
+            });
+            response.writeHead(200, {'Content-type' : "text/plain; charset=utf8"});
+            response.end(mood); 
+        }
+        else{
+            response.writeHead(200, {'Content-type' : "text/plain; charset=utf8"});
+            response.end(`Here exist your past mood: ${mood}`); 
+        }
+    }
+    else if(request.method === "PUT"){
+        if(!mood){
+            response.writeHead(200, {'Content-type' : "text/plain; charset=utf8"});
+            response.end(`There is not a mood to update. Post new!`); 
+        }
+        else{
+            let newMood = '';
+            request.on('data', (chunk) => {
+                newMood += chunk;
+            });
+            
+            request.on('end', () => {
+                console.log(`Your last mood: ${mood}`);
+                mood = newMood;
+                console.log(`Your current mood: ${mood}`);
+            });
+            response.writeHead(200, {'Content-type' : "text/plain; charset=utf8"});
+            response.end("Mood changed!"); 
+        }
+    }
+    else if(request.method === "PATCH"){
+        let updatedMood = '';
+
+        request.on('data', (chunk) => {
+            updatedMood += chunk;
+        });
+
+        request.on('end', () => {
+            mood += updatedMood;
+            console.log(`Mood updated: ${mood}`);
+            response.writeHead(200, {'Content-type' : "text/plain; charset=utf8"});
+            response.end("Mood updated"); 
+        });
+    }
+    else if(request.method === "DELETE"){
+        console.log(`Your mood before delete: ${mood}`);
+        mood = '';
+        console.log('Mood deleted');
+        response.writeHead(200, {'Content-type' : "text/plain; charset=utf8"});
+        response.end(`Mood deleted...`); 
+    }
+    else if (request.url == '/'){
+        response.writeHead(200, {'Content-type': 'text/html; charset=utf8'})
+        response.end(mood);
+    }
+    else{
+        response.writeHead(404, {'Content-type' : "text/plain; charset=utf8"});
+        response.end("404 Not Found");
+    }
+    
     
 });
 
