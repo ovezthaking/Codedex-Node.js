@@ -8,10 +8,10 @@ const server = http.createServer((request, response) => {
         });
 
         request.on('end', () => {
-            console.log('New message: ', message);
+            console.log('New tweet: ', message);
 
             response.writeHead('200', {'Content-type' : 'text/plain'});
-            response.end("Message received " + message);
+            response.end("Tweet received: " + message);
         });
     }
     else{
