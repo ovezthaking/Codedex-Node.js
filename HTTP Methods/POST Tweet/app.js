@@ -24,3 +24,6 @@ const server = http.createServer((request, response) => {
 server.listen(3000, () => {
     console.log('http://localhost:3000/');
 });
+
+
+//send tweet: curl -X POST http://localhost:3000 -d "This is a message"
