@@ -17,3 +17,4 @@ if (os.uptime()<SECONDS_IN_A_WEEK){
 else if (os.uptime()>SECONDS_IN_A_WEEK){
     console.log('Do u sleep sometimes?');
 }
+
