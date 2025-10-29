@@ -4,12 +4,18 @@ let statusMessage = 'This is my status.';
 
 const server = http.createServer((request, response) => {
     if (request.method === "DELETE"){
-        console.log("Status message for delete: " + statusMessage);
-        statusMessage = null;
-        console.log("Status message deleted");
-        
-        response.writeHead(200, {'Content-type': 'text/plain'});
-        response.end("Status message deleted");
+        if(!statusMessage){
+            console.log("No status to delete");
+            response.writeHead(200, {'Content-type': 'text/plain'});
+            response.end("No status to delete");
+        }
+        else{
+            console.log("Status message for delete: " + statusMessage);
+            statusMessage = null;
+            console.log("Status message deleted");
+            response.writeHead(200, {'Content-type': 'text/plain'});   
+            response.end("Status message deleted");
+        }
     }
     else{
         response.writeHead(404, {'Content-type': 'text/plain'});
